@@ -4,12 +4,12 @@ utils = require './utils'
 _ = merge: require 'lodash.merge'
 
 module.exports =
-  generateDocument: (zip) ->
+  generateDocument: (type,zip) ->
     buffer = zip.generate(type: 'arraybuffer')
-    if global.Blob
+    if( type === 'blob')
       new Blob [buffer],
         type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
-    else if global.Buffer
+    else if (type === 'buffer')
       new Buffer new Uint8Array(buffer)
     else
       throw new Error "Neither Blob nor Buffer are accessible in this environment. " +

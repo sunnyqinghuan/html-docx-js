@@ -13013,11 +13013,11 @@ internal = _dereq_('./internal');
 
 
 module.exports = {
-  asBlob: function(html, options) {
+  asBlob: function(type='blob',html, options) {
     var zip;
     zip = new JSZip();
     internal.addFiles(zip, html, options);
-    return internal.generateDocument(zip);
+    return internal.generateDocument(type,zip);
   }
 };
 
@@ -13037,16 +13037,16 @@ _ = {
 };
 
 module.exports = {
-  generateDocument: function(zip) {
+  generateDocument: function(type='blob',zip) {
     var buffer;
     buffer = zip.generate({
       type: 'arraybuffer'
     });
-    if (global.Blob) {
+    if (type === 'blob') {
       return new Blob([buffer], {
         type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
       });
-    } else if (global.Buffer) {
+    } else if (type === 'buffer') {
       return new Buffer(new Uint8Array(buffer));
     } else {
       throw new Error("Neither Blob nor Buffer are accessible in this environment. " + "Consider adding Blob.js shim");
